@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import BrowseServices from "./pages/BrowseServices";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import Booking from "./pages/Booking";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/browse" element={<BrowseServices />} />
+          <Route path="/book" element={<Booking />} />
           <Route path="/provider" element={<ProviderDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

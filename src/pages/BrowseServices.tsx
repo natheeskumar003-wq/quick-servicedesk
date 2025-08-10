@@ -1,5 +1,5 @@
 import ServiceCard from "@/components/ServiceCard";
-import { Wrench, Sparkles, Lightbulb, Fan } from "lucide-react";
+import { Wrench, Sparkles, Lightbulb, Fan, Brush, Scissors } from "lucide-react";
 
 const services = [
   {
@@ -21,6 +21,16 @@ const services = [
     title: "HVAC",
     description: "AC service, heating, ventilation checks.",
     icon: Fan,
+  },
+  {
+    title: "Beauty",
+    description: "At-home beauty services: makeup, skincare, more.",
+    icon: Brush,
+  },
+  {
+    title: "Salon",
+    description: "Haircuts, styling, grooming at your convenience.",
+    icon: Scissors,
   },
 ];
 

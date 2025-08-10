@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export type IconType = FC<{ className?: string }>;
 
@@ -24,8 +25,8 @@ const ServiceCard: FC<ServiceCardProps> = ({ title, description, icon: Icon, cta
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground flex flex-col gap-4">
         <p>{description}</p>
-        <Button variant="premium" size="sm" aria-label={`Book ${title}`}>
-          {cta}
+        <Button asChild variant="premium" size="sm" aria-label={`Book ${title}`}>
+          <Link to={`/book?service=${encodeURIComponent(title)}`}>{cta}</Link>
         </Button>
       </CardContent>
     </Card>

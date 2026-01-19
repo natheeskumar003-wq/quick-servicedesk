@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
-import { Calendar as CalendarIcon, Clock, CreditCard } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, CreditCard, Smartphone } from "lucide-react";
 
 const Booking: React.FC = () => {
   const location = useLocation();
@@ -22,6 +22,8 @@ const Booking: React.FC = () => {
   const [time, setTime] = React.useState<string>("");
   const [address, setAddress] = React.useState<string>("");
   const [notes, setNotes] = React.useState<string>("");
+  const [upiId, setUpiId] = React.useState<string>("");
+  const [showUpiForm, setShowUpiForm] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     document.title = `Book ${service} | QuickServe`;
@@ -64,13 +66,29 @@ const Booking: React.FC = () => {
   }
 
   function handlePayOnline() {
+    setShowUpiForm(true);
+  }
+
+  function handleUpiPayment() {
+    if (!upiId || !upiId.includes("@")) {
+      toast({
+        title: "Invalid UPI ID",
+        description: "Please enter a valid UPI ID (e.g., name@upi)",
+      });
+      return;
+    }
+    if (!date || !time || !address) {
+      toast({
+        title: "Missing details",
+        description: "Please complete booking details before payment.",
+      });
+      return;
+    }
     toast({
-      title: "Online payment setup",
-      description:
-        "Please connect Supabase and provide Stripe details to enable checkout.",
+      title: "Payment Initiated",
+      description: `UPI payment request sent to ${upiId}. Complete payment in your UPI app.`,
     });
-    // Next step (after Supabase + Stripe):
-    // - Invoke Edge Function 'create-payment' and redirect to Checkout
+    setShowUpiForm(false);
   }
 
   return (
@@ -155,11 +173,45 @@ const Booking: React.FC = () => {
 
           <div className="flex flex-wrap gap-3">
             <Button onClick={handleConfirm}>Confirm booking</Button>
-            <Button variant="premium" onClick={handlePayOnline}>
-              <CreditCard className="h-4 w-4" />
-              Pay online
+            <Button variant="outline" onClick={handlePayOnline}>
+              <Smartphone className="h-4 w-4 mr-1" />
+              Pay via UPI
             </Button>
           </div>
+
+          {showUpiForm && (
+            <Card className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Smartphone className="h-5 w-5" />
+                  UPI Payment
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="upi-id">UPI ID</Label>
+                  <Input
+                    id="upi-id"
+                    placeholder="yourname@upi, phone@paytm, etc."
+                    value={upiId}
+                    onChange={(e) => setUpiId(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Enter your UPI ID to receive a payment request
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleUpiPayment}>
+                    <CreditCard className="h-4 w-4 mr-1" />
+                    Pay ₹500
+                  </Button>
+                  <Button variant="ghost" onClick={() => setShowUpiForm(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </article>
 
         <aside className="md:col-span-2">
